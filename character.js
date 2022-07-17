@@ -1,4 +1,4 @@
-import {getDiceRollArray, getDicePlaceholderHtml} from "./utils.js"
+import {getDiceRollArray, getDicePlaceholderHtml, getPercentage} from "./utils.js"
 
 function Character(data) {
     // everything in data object is assigned to new object
@@ -65,11 +65,8 @@ function Character(data) {
                     </div>
                 </div>`
     }
-
 }
 
-// percentage of health a character has
-const getPercentage = (remainingHealth, maximumHealth) => 
-    (100 * remainingHealth) / maximumHealth
+
     
 export default Character
