@@ -6,38 +6,46 @@ document.getElementById("attack-button").addEventListener("click", attack)
 let monstersArray = ["orc", "demon", "goblin"];
 
 function attack() {
-    wizard.getDiceHtml()
-    monster.getDiceHtml()
-
-    wizard.takeDamage(monster.currentDiceScore)
-    monster.takeDamage(wizard.currentDiceScore)
-    render()
+    if (wizard.dead || monster.dead) {
+        // nothing happens - attack button effectively disabled
+    } else {
+        wizard.setDiceHtml()
+        monster.setDiceHtml()
     
-    if (wizard.dead) {
-        endGame()
-    } else if (monster.dead) {
-        if (monstersArray.length === 0) {
+        wizard.takeDamage(monster.currentDiceScore)
+        monster.takeDamage(wizard.currentDiceScore)
+        render()
+        
+        if (wizard.dead) {
             endGame()
-        } else {
-            monster = getNewMonster()
-            render()
+        } else if (monster.dead) {
+            if (monstersArray.length === 0) {
+                endGame()
+            } else {
+                setTimeout (function() {
+                    monster = getNewMonster()
+                    render()
+                }, 1500)
+            }
         }
     }
 }
 
 function endGame() {
-    const endMessage = wizard.health === 0 && monster.health === 0 ?"No victors - all creatures are dead" :
+    const endMessage = wizard.health === 0 && monster.health === 0 ? "No victors - all creatures are dead" :
         wizard.health > 0 ? "The Wizard Wins" :
         `The ${monster.name} is Victorious`;
 
     const endEmoji = wizard.health === 0 ? `☠️` : `🔮`
-
-    document.body.innerHTML = 
-        `<div class="end-game">
-            <h2>Game Over</h2>
-            <h3>${endMessage}</h3>
-            <p class="end-emoji">${endEmoji}</p>
-        </div>`;
+    
+    setTimeout(function() {
+        document.body.innerHTML = 
+            `<div class="end-game">
+                <h2>Game Over</h2>
+                <h3>${endMessage}</h3>
+                <p class="end-emoji">${endEmoji}</p>
+            </div>`;
+    }, 1500)
 }
  
 function render() {
