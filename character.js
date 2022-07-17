@@ -26,12 +26,15 @@ function Character(data) {
         // declare diceHTML - later used to show multiple dice 
         let diceHTML = ""
 
+        const healthBar = this.getHealthBarHtml()
+
         diceHTML = this.getDiceHtml(diceCount)
 
         return `<div class="character-card">
             <h4 class="name"> ${name} </h4>
             <img class="avatar" src="${avatar}" />
             <div class="health">health: <b> ${health} </b></div>
+            ${healthBar}
             <div class="dice-container">
                 ${diceArray}
             </div>
@@ -45,14 +48,22 @@ function Character(data) {
 
         this.health -= totalAttackScore
 
-        // console log percentage of health remaining
-        console.log(`${this.name} has ${Math.round(getPercentage(this.health, this.maxHealth))}% health remaining`)
-
         // if health reaches zero, character declared dead
         if (this.health <= 0) {
             this.health = 0
             this.dead = true;
         }
+    }
+
+    // render out health bar - red if 25%
+    this.getHealthBarHtml = function() {
+        const percent = getPercentage(this.health, this.maxHealth)
+        
+        return `<div class="health-bar-outer">
+                    <div class="health-bar-inner ${percent <= 25 ? `danger` : ``} " 
+                    style="width: ${percent}%;">
+                    </div>
+                </div>`
     }
 
 }
